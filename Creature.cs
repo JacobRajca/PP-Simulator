@@ -20,30 +20,16 @@ public abstract class Creature
                 throw new InvalidOperationException("Name can only be set once.");
             }
 
-            if(string.IsNullOrEmpty(value) )
+            if (string.IsNullOrEmpty(value))
             {
                 value = "###";
             }
 
             value = value.Trim();
-       
 
-            if (value.Length < 3)
-            {
-                value = value.PadRight(3, '#');
-            }
+            value = Validator.Shortener(value, 3, 25, '#');
 
-            if (value.Length > 25)
-            {
-                value = value.Substring(0, 25).TrimEnd();
-            }
-
-            if (value.Length < 3)
-            {
-                value = value.PadRight(3, '#');
-            }
-
-            if (char.IsLower(value[0])) 
+            if (char.IsLower(value[0]))
             {
                 value = char.ToUpper(value[0]) + value.Substring(1);
             }
@@ -57,18 +43,18 @@ public abstract class Creature
         get => _level;
         set
         {
-            if(_level != 1)
+            if (_level != 1)
             {
                 throw new InvalidOperationException("Level can only be set once.");
             }
-            _level = Math.Clamp(value, 1,10);
+            _level = Validator.Limiter(value, 1, 10);
         }
     }
 
     public abstract void SayHi();
     public abstract int Power { get; }
 
-    public string Info => $"{Name}, Level {Level}";
+    public abstract string Info{get; }
     public Creature(string name, int level = 1)
     {
         Name = name;
@@ -105,6 +91,10 @@ public abstract class Creature
         Go(directions);
     }
 
+    public override string ToString()
+    {
+        return $"{this.GetType().Name.ToUpper()}: {Name} [{Level}]{Info}";
+    }
 }
 
 public class Elf : Creature
@@ -115,7 +105,7 @@ public class Elf : Creature
 
     public Elf(string name = "Unknown", int level = 1, int agility=0) : base(name, level)
     {
-        Agility = Math.Clamp(agility, 0, 10);
+        Agility = Validator.Limiter(agility, 0, 10);
     }
 
     public override void SayHi() => Console.WriteLine(
@@ -128,10 +118,12 @@ public class Elf : Creature
         _singCount++;
         if (_singCount % 3 == 0)
         {
-            Agility = Math.Clamp(Agility + 1, 0, 10);
+            Agility = Validator.Limiter(Agility + 1, 0, 10);
         }
     }
     public override int Power => Level * 8 + Agility * 2;
+
+    public override string Info => $"[{Agility}]";
 }
 
 public class Orc : Creature
@@ -141,7 +133,7 @@ public class Orc : Creature
 
     public Orc(string name = "Unknown", int level = 1, int rage = 0) : base(name, level)
     {
-        Rage = Math.Clamp(rage,0,10);
+        Rage = Validator.Limiter(rage,0,10);
     }
     public override void SayHi() => Console.WriteLine(
     $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}."
@@ -153,8 +145,30 @@ public class Orc : Creature
         _huntCount++;
         if (_huntCount % 2 == 0)
         {
-            Rage = Math.Clamp(Rage + 1,0,10);
+            Rage = Validator.Limiter(Rage + 1,0,10);
         }
     }
     public override int Power => Level * 7 + Rage * 3;
+
+    public override string Info => $"[{Rage}]";
+}
+
+public static class Validator
+{
+
+    public static int Limiter(int value, int min, int max)
+    {
+        return Math.Clamp(value,min, max);
+    }
+
+
+    public static string Shortener(string value, int min, int max, char placeholder)
+    {
+        if (value.Length < min) return value.PadRight(min, placeholder);
+        if (value.Length > max)
+        {
+            return value.Substring(0, max) + placeholder;
+        }
+        return value;
+    }
 }

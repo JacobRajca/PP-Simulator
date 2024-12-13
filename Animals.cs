@@ -24,20 +24,7 @@ public class Animals
             value = value.Trim();
 
 
-            if (value.Length < 3)
-            {
-                value = value.PadRight(3, '#');
-            }
-
-            if (value.Length > 15)
-            {
-                value = value.Substring(0, 15).TrimEnd();
-            }
-
-            if (value.Length < 3)
-            {
-                value = value.PadRight(3, '#');
-            }
+            value = Validator.Shortener(value, 3, 15, '#');
 
             if (char.IsLower(value[0]))
             {
@@ -49,6 +36,27 @@ public class Animals
     }
 
     public uint Size { get; set; } = 3;
-    public string Info => $"{Description} <{Size}>";
+    public virtual string Info => $"{Description} <{Size}>";
+
+    public override string ToString()
+    {
+        return $"{this.GetType().Name.ToUpper()}: {Info}";
+    }
+}
+
+public class Birds : Animals 
+{
+    public bool CanFly { get; set; } = true;
+
+    public override string Info
+    {
+        get
+        {
+            string flyInfo = CanFly ? "(fly+)" : "(fly-)";
+            return $"{Description} {flyInfo} <{Size}>";
+        }
+
+    }
+
 }
 
