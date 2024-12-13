@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Simulator;
-public class Creature
+public abstract class Creature
 {
     private string _name = "Unknown";
     private int _level = 1;
@@ -65,13 +65,9 @@ public class Creature
         }
     }
 
-    public void Upgrade()
-    {
-        if (_level < 10)
-        {
-            _level++;
-        }
-    }
+    public abstract void SayHi();
+    public abstract int Power { get; }
+
     public string Info => $"{Name}, Level {Level}";
     public Creature(string name, int level = 1)
     {
@@ -79,12 +75,16 @@ public class Creature
         Level = level;
     }
 
-    public Creature() {}
+    public Creature() { }
 
-    public void SayHi()
+    public void Upgrade()
     {
-        Console.WriteLine($"Hi, my name is {Name} and I am at level {Level}");
+        if (_level < 10)
+        {
+            _level++;
+        }
     }
+
 
     public void Go(Direction direction)
     {
@@ -107,3 +107,54 @@ public class Creature
 
 }
 
+public class Elf : Creature
+{
+    private int _singCount = 0;
+
+    public int Agility{ get;set; }
+
+    public Elf(string name = "Unknown", int level = 1, int agility=0) : base(name, level)
+    {
+        Agility = Math.Clamp(agility, 0, 10);
+    }
+
+    public override void SayHi() => Console.WriteLine(
+    $"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}."
+    );
+
+    public void Sing()
+    {
+        Console.WriteLine($"{Name} is singing.");
+        _singCount++;
+        if (_singCount % 3 == 0)
+        {
+            Agility = Math.Clamp(Agility + 1, 0, 10);
+        }
+    }
+    public override int Power => Level * 8 + Agility * 2;
+}
+
+public class Orc : Creature
+{
+    private int _huntCount = 0;
+    public int Rage { get;set; }
+
+    public Orc(string name = "Unknown", int level = 1, int rage = 0) : base(name, level)
+    {
+        Rage = Math.Clamp(rage,0,10);
+    }
+    public override void SayHi() => Console.WriteLine(
+    $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}."
+    );
+
+    public void Hunt()
+    {
+        Console.WriteLine($"{Name} is hunting.");
+        _huntCount++;
+        if (_huntCount % 2 == 0)
+        {
+            Rage = Math.Clamp(Rage + 1,0,10);
+        }
+    }
+    public override int Power => Level * 7 + Rage * 3;
+}
