@@ -1,43 +1,11 @@
-﻿namespace Simulator;
+﻿using Simulator.Maps;
+namespace Simulator;
 internal class Program
 {
     static void Main(string[] args)
     {
-        Lab5a();
+        Lab5b();
     }
-    static void Lab4a()
-    {
-        Console.WriteLine("HUNT TEST\n");
-        var o = new Orc() { Name = "Gorbag", Rage= 7 };
-        o.SayHi();
-        for (int i = 0; i < 10; i++)
-        {
-            o.Hunt();
-            o.SayHi();
-        }
-
-        Console.WriteLine("\nSING TEST\n");
-        var e = new Elf("Legolas", agility: 2);
-        e.SayHi();
-        for (int i = 0; i < 10; i++)
-        {
-            e.Sing();
-            e.SayHi();
-        }
-
-        Console.WriteLine("\nPOWER TEST\n");
-        Creature[] creatures = {
-        o,
-        e,
-        new Orc("Morgash", 3, 8),
-        new Elf("Elandor", 5, 3)
-    };
-        foreach (Creature creature in creatures)
-        {
-            Console.WriteLine($"{creature.Name,-15}: {creature.Power}");
-        }
-    }
-
     static void Lab5a()
     {
         try
@@ -62,6 +30,39 @@ internal class Program
             Rectangle invalid = new Rectangle(2, 3, 2, 7);
         }
         catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+    
+    static void Lab5b()
+    {
+        try
+        {
+            // Test tworzenia map
+            SmallSquareMap map = new SmallSquareMap(10);
+            Console.WriteLine($"Map stworzona o rozmiarze: {map.Size}");
+
+            // Test Exist()
+            Point inside = new Point(5, 5);
+            Point outside = new Point(-1, 10);
+            Console.WriteLine($"Punkt {inside} istnieje: {map.Exist(inside)}");  // True
+            Console.WriteLine($"Punkt {outside} istnieje: {map.Exist(outside)}"); // False
+
+            // Test Next()
+            Point start = new Point(9, 9);
+            Point next = map.Next(start, Direction.Right);
+            Console.WriteLine($"Nastepny punkt z {start} w prawo: {next}");  // Powinien byc (9,9), wyszedl poza krawedzie
+
+            // Test NextDiagonal()
+            Point diagonalStart = new Point(4, 4);
+            Point diagonalNext = map.NextDiagonal(diagonalStart, Direction.Up);
+            Console.WriteLine($"Nastepny punkt po skosie z {diagonalStart} w gore: {diagonalNext}");
+
+            // Próba stworzenia mapy z niepoprawnym rozmiarem
+            SmallSquareMap invalidMap = new SmallSquareMap(25); // Powinien rzucić wyjątek
+        }
+        catch (ArgumentOutOfRangeException ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
         }
