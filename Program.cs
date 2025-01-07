@@ -3,7 +3,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Lab4b();
+        Lab5a();
     }
     static void Lab4a()
     {
@@ -38,24 +38,34 @@ internal class Program
         }
     }
 
-
-    static void Lab4b()
+    static void Lab5a()
     {
-        object[] myObjects = {
-        new Animals() { Description = "dogs"},
-        new Birds { Description = "  eagles ", Size = 10 },
-        new Elf("e", 15, -3),
-        new Orc("morgash", 6, 4)
-        };
-        Console.WriteLine("\nMy objects:");
-        foreach (var o in myObjects) Console.WriteLine(o);
-        /*
-            My objects:
-            ANIMALS: Dogs <3>
-            BIRDS: Eagles (fly+) <10>
-            ELF: E## [10][0]
-            ORC: Morgash [6][4]
-        */
+        try
+        {
+            // Poprawne prostokąty
+            Rectangle r1 = new Rectangle(2, 3, 5, 7);
+            Console.WriteLine($"Prostokat {r1}");
+
+            // Prostokąt z błędnym układem współrzędnych
+            Rectangle r2 = new Rectangle(5, 7, 2, 3);
+            Console.WriteLine($"Prostokat {r2} z zamienionymi miejscami");
+
+            // Prostokąt zawierający punkt
+            Point p1 = new Point(3, 4);
+            Console.WriteLine($"Prostokat {r1} zawiera w sobie punkt {p1}: {r1.Contains(p1)}");
+
+            // Prostokąt nie zawierający punktu
+            Point p2 = new Point(10, 10);
+            Console.WriteLine($"Prostokat {r1} zawiera w sobie punkt {p2}: {r1.Contains(p2)}");
+
+            // Niepoprawny prostokąt (współliniowy)
+            Rectangle invalid = new Rectangle(2, 3, 2, 7);
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
     }
+
 }
 
