@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Simulator;
 public abstract class Creature
 {
@@ -51,7 +46,7 @@ public abstract class Creature
         }
     }
 
-    public abstract void SayHi();
+    public abstract string Greeting();
     public abstract int Power { get; }
 
     public abstract string Info{get; }
@@ -72,23 +67,24 @@ public abstract class Creature
     }
 
 
-    public void Go(Direction direction)
-    {
-        Console.WriteLine($"{Name} goes {direction.ToString().ToLower()}.");
-    }
+    public string Go(Direction direction) => $"{direction.ToString().ToLower()}";
 
-    public void Go(Direction[] directions)
+    public string[] Go(Direction[] directions)
     {
-        foreach (var direction in directions)
+        var results = new string[directions.Length];
+    
+        for (int i = 0; i < directions.Length; i++)
         {
-            Go(direction);
+            results[i] = Go(directions[i]);
         }
+    
+        return results;
     }
 
-    public void Go(string input)
+    public string[] Go(string input)
     {
         var directions = DirectionParser.Parse(input);
-        Go(directions);
+        return Go(directions);
     }
 
     public override string ToString()

@@ -9,13 +9,12 @@ public class Orc : Creature
     {
         Rage = Validator.Limiter(rage,0,10);
     }
-    public override void SayHi() => Console.WriteLine(
+    public override string Greeting() => (
         $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}."
     );
 
     public void Hunt()
     {
-        Console.WriteLine($"{Name} is hunting.");
         _huntCount++;
         if (_huntCount % 2 == 0)
         {

@@ -11,13 +11,12 @@ public class Elf : Creature
         Agility = Validator.Limiter(agility, 0, 10);
     }
 
-    public override void SayHi() => Console.WriteLine(
+    public override string Greeting() => (
         $"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}."
     );
 
     public void Sing()
     {
-        Console.WriteLine($"{Name} is singing.");
         _singCount++;
         if (_singCount % 3 == 0)
         {
