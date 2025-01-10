@@ -1,10 +1,11 @@
-﻿
+﻿using Simulator.Maps;
 namespace Simulator;
 public abstract class Creature
 {
     private string _name = "Unknown";
     private int _level = 1;
-
+    public Point? Position { get; private set; } = null;
+    public SmallMap? Map { get; private set; } = null;
     public string Name
     {
         get => _name;
@@ -65,30 +66,28 @@ public abstract class Creature
             _level++;
         }
     }
-
-
-    public string Go(Direction direction) => $"{direction.ToString().ToLower()}";
-
-    public string[] Go(Direction[] directions)
-    {
-        var results = new string[directions.Length];
-    
-        for (int i = 0; i < directions.Length; i++)
-        {
-            results[i] = Go(directions[i]);
-        }
-    
-        return results;
-    }
-
-    public string[] Go(string input)
-    {
-        var directions = DirectionParser.Parse(input);
-        return Go(directions.ToArray());
-    }
-
     public override string ToString()
     {
         return $"{this.GetType().Name.ToUpper()}: {Name} [{Level}]{Info}";
+    }
+    
+    public void AssignMap(SmallMap map, Point position)
+    {
+        if (!map.Exist(position))
+            throw new ArgumentException("Postac poza granicami mapy");
+
+        Map = map;
+        Position = position;
+        map.Add(this, position);
+    }
+
+    public void Go(Direction direction)
+    {
+        if (Map == null || Position == null)
+            return;
+
+        var newPosition = Map.Next(Position.Value, direction);
+        Map.Move(this, Position.Value, newPosition);
+        Position = newPosition;
     }
 }
