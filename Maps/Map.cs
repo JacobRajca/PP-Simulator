@@ -6,11 +6,41 @@ namespace Simulator.Maps;
 public abstract class Map
 {
     /// <summary>
+    /// Width of the map.
+    /// </summary>
+    public int SizeX { get; }
+
+    /// <summary>
+    /// Height of the map.
+    /// </summary>
+    public int SizeY { get; }
+    
+    /// <summary>
+    /// Base constructor for maps.
+    /// </summary>
+    /// <param name="sizeX">Width of the map.</param>
+    /// <param name="sizeY">Height of the map.</param>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if dimensions are smaller than 5.
+    /// </exception>
+    protected Map(int sizeX, int sizeY)
+    {
+        if (sizeX < 5 || sizeY < 5)
+            throw new ArgumentOutOfRangeException("Minimalna wielkosc mapy wynosi 5.");
+
+        SizeX = sizeX;
+        SizeY = sizeY;
+    }
+    
+    /// <summary>
     /// Check if give point belongs to the map.
     /// </summary>
     /// <param name="p">Point to check.</param>
     /// <returns></returns>
-    public abstract bool Exist(Point p);
+    public virtual bool Exist(Point p)
+    {
+        return p.X >= 0 && p.X < SizeX && p.Y >= 0 && p.Y < SizeY;
+    }
     
     /// <summary>
     /// Next position to the point in a given direction.

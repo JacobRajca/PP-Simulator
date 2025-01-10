@@ -84,7 +84,7 @@ public abstract class Creature
     public string[] Go(string input)
     {
         var directions = DirectionParser.Parse(input);
-        return Go(directions);
+        return Go(directions.ToArray());
     }
 
     public override string ToString()

@@ -42,8 +42,8 @@ internal class Program
         try
         {
             // Test tworzenia map
-            SmallSquareMap map = new SmallSquareMap(10);
-            Console.WriteLine($"Map stworzona o rozmiarze: {map.Size}");
+            SmallSquareMap map = new SmallSquareMap(10,15);
+            Console.WriteLine($"Map stworzona o rozmiarze: {map.SizeX} {map.SizeY}");
 
             // Test Exist()
             Point inside = new Point(5, 5);
@@ -62,7 +62,7 @@ internal class Program
             Console.WriteLine($"Nastepny punkt po skosie z {diagonalStart} w gore: {diagonalNext}");
 
             // Próba stworzenia mapy z niepoprawnym rozmiarem
-            SmallSquareMap invalidMap = new SmallSquareMap(25); // Powinien rzucić wyjątek
+            SmallSquareMap invalidMap = new SmallSquareMap(25,22); // Powinien rzucić wyjątek
         }
         catch (ArgumentOutOfRangeException ex)
         {

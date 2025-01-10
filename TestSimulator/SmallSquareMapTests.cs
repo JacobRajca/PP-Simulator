@@ -9,36 +9,40 @@ public class SmallSquareMapTests
     public void Constructor_ValidSize_ShouldSetSize()
     {
         // Arrange
-        int size = 10;
+        int sizeX = 10;
+        int sizeY = 15;
         // Act
-        var map = new SmallSquareMap(size);
+        var map = new SmallSquareMap(sizeX, sizeY);
         // Assert
-        Assert.Equal(size, map.Size);
+        Assert.Equal(sizeX, map.SizeX);
+        Assert.Equal(sizeY, map.SizeY);
     }
 
     [Theory]
-    [InlineData(4)]
-    [InlineData(21)]
+    [InlineData(4,10)]
+    [InlineData(21,10)]
+    [InlineData(10,4)]
+    [InlineData(10,21)]
     public void 
         Constructor_InvalidSize_ShouldThrowArgumentOutOfRangeException
-        (int size)
+        (int sizeX, int sizeY)
     {
         // Act & Assert
         // The way to check if method throws anticipated exception:
         Assert.Throws<ArgumentOutOfRangeException>(() =>
-             new SmallTorusMap(size));
+             new SmallSquareMap(sizeX,sizeY));
     }
 
     [Theory]
-    [InlineData(3, 4, 5, true)]
-    [InlineData(6, 1, 5, false)]
-    [InlineData(19, 19, 20, true)]
-    [InlineData(20, 20, 20, false)]
+    [InlineData(3, 4, 10, 15, true)]
+    [InlineData(10, 15, 10, 15, false)]
+    [InlineData(0, 0, 10, 15, true)]
+    [InlineData(9, 14, 10, 15, true)]
     public void Exist_ShouldReturnCorrectValue(int x, int y, 
-        int size, bool expected)
+        int sizeX,int sizeY, bool expected)
     {
         // Arrange
-        var map = new SmallSquareMap(size);
+        var map = new SmallSquareMap(sizeX,sizeY);
         var point = new Point(x, y);
         // Act
         var result = map.Exist(point);
@@ -55,7 +59,7 @@ public class SmallSquareMapTests
         Direction direction, int expectedX, int expectedY)
     {
         // Arrange
-        var map = new SmallSquareMap(20);
+        var map = new SmallSquareMap(18,15);
         var point = new Point(x, y);
         // Act
         var nextPoint = map.Next(point, direction);
@@ -72,7 +76,7 @@ public class SmallSquareMapTests
         Direction direction, int expectedX, int expectedY)
     {
         // Arrange
-        var map = new SmallSquareMap(20);
+        var map = new SmallSquareMap(15,15);
         var point = new Point(x, y);
         // Act
         var nextPoint = map.NextDiagonal(point, direction);
